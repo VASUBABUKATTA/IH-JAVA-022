@@ -1,0 +1,125 @@
+GIT commands
+================
+
+Q) Difference between GIT vs GITHUB ?
+
+
+GIT						GITHUB
+--------					---------
+It is distributed version control system	It is a web-based hosting 
+to track changes of each file in a project.	service for git.
+
+It contains local repository.			It contains remote repository.
+
+It is command line tool.			It is GUI.
+
+It is locally installed.			It is hosted on web.
+
+
+
+Q)Types of stages of Git?
+
+We have three stages in git.
+
+Working Directory : 
+----------------------------
+	the file exists, but is not part of git's version control.
+
+staging area: 
+--------------------
+	the file has been added to git's version control but changes 
+	have not been committed
+
+Repository: 
+------------
+	the change has been committed 
+
+Diagram: git
+
+
+
+Remote repository github
+==========================
+	https://github.com/NiyazulHasan/practice
+
+
+
+Q)Write a git command to initialized empty repository?
+
+	git init
+
+
+Q)Write a git command to check the status? 
+
+	git status 
+
+Q)Write a git command to check the branch?
+
+	git branch 
+
+
+Q)Write a git command to add remote repository?
+
+	git remote add origin https://github.com/NiyazulHasan/practice
+
+
+Q)Write a git command to check the remote repository
+
+	git remote -v 
+
+Q)Write a git command to commit the changes?
+
+	git commit -m "comment here"
+
+
+Q)Write a git command to push the code to remote origin?
+	
+	git push -f origin main 
+
+
+Q)Write a git command to clone the project?
+
+	git clone <url>
+
+Q)Write a git command to pull request?
+
+	git pull <url>
+
+Q)Write a git command to move from master branch to main branch?
+
+	git branch --move master main
+
+
+
+
+
+
+
+
+Waterfall model vs Agile
+===========================
+Q) Agile Methodology vs WaterFall Model ?
+
+Agile 					WaterFall Model
+----------				----------------
+It processes non-linear,incremental and	It processes linear and sequential approach 
+interactive approach for a software 	for a software design.
+design.
+
+At each incremental approach project 	At the end whole project is tested.
+is tested.
+
+A customer has early and frequent 	A customer only can see that product at the 
+opportunities to look at the product	end of the project.
+and make decisions or changes to the 
+project.
+
+It is unstructured because it is not	It is structured because it is plan oriented.
+plan oriented.
+
+Small projects can be implemented 	All sort of projects can be estimated and	
+quickly.But large projects can't be	implemented. 
+estimated and implemented due to 
+frequent changes.
+
+
