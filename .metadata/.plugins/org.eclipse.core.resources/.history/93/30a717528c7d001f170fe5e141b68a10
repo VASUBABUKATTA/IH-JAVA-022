@@ -1,0 +1,5 @@
+package com.insurance.Exception;
+
+public class JsonInternalServerError {
+
+}

@@ -1,0 +1,104 @@
+package com.insurance.Exception;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.NoHandlerFoundException;
+
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+	
+	 private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+	
+	@ExceptionHandler(ResourceNotFoundException.class)
+	public ResponseEntity<String> notFoundException (ResourceNotFoundException ex)
+	{
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+	}
+	
+	@ExceptionHandler(DuplicateEntryException.class)
+	public ResponseEntity<String> duplicateEntryException (DuplicateEntryException ex)
+	{
+		return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+	}
+	
+	@ExceptionHandler(UsernameNotFoundException.class)
+	public ResponseEntity<String> duplicateEntryException (UsernameNotFoundException ex)
+	{
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
+	}
+	
+	@ExceptionHandler(MissingServletRequestParameterException.class)
+	public ResponseEntity<String> handleMissingParams(MissingServletRequestParameterException ex) {
+	    String message = "Missing required parameter: " + ex.getParameterName();
+	    return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+	}
+
+
+	
+	 @ResponseStatus(HttpStatus.BAD_REQUEST)
+	    @ExceptionHandler(MethodArgumentNotValidException.class)
+	    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+	        Map<String, String> errors = new HashMap<>();
+	        ex.getBindingResult().getAllErrors().forEach((error) -> {
+	            String fieldName = ((FieldError) error).getField();
+	            String errorMessage = error.getDefaultMessage();
+	            errors.put(fieldName, errorMessage);
+	        });
+	        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+	    }
+	 
+	 @ExceptionHandler(HttpMessageNotReadableException.class)
+	    public ResponseEntity<String> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
+	        // Return 400 status code for JSON parse errors
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid JSON format: " + ex.getMessage());
+	    }
+	 	
+	 @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+	    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+	    public ResponseEntity<String> handleMethodNotSupportedException(HttpRequestMethodNotSupportedException ex) {
+	        // Customize the message for unsupported methods
+	        String message = "Error: HTTP method " + ex.getMethod() + " not supported for this endpoint. Supported methods are: "
+	                + ex.getSupportedHttpMethods();
+	        return new ResponseEntity<>(message, HttpStatus.METHOD_NOT_ALLOWED);
+	    }
+	 
+	 @ExceptionHandler({ IllegalArgumentException.class, IllegalStateException.class })
+	 public ResponseEntity<String> handleIllegalArgumentException(RuntimeException ex) {
+	     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid request: " + ex.getMessage());
+	 }
+
+	 
+	 @ExceptionHandler(Exception.class)
+	 public ResponseEntity<String> handleGlobalException(Exception ex) {
+	     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred: " + ex.getMessage());
+	 }
+	 
+	 @ExceptionHandler(AccessDeniedException.class)
+	 public ResponseEntity<String> handleAccessDeniedException(AccessDeniedException ex) {
+	     return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access Denied: " + ex.getMessage());
+	 }
+	 
+	 @ExceptionHandler(NoHandlerFoundException.class)
+	 @ResponseStatus(HttpStatus.NOT_FOUND)
+	 public ResponseEntity<String> handleNoHandlerFoundException(NoHandlerFoundException ex) {
+	     String errorResponse = "No handler found for the requested URL" + ex.getRequestURL();
+	     return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+	 }
+	 
+}
